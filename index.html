@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta content="utf-8" http-equiv="encoding">
+    <title>Dragon's Greed - A Fantasy dice game.</title>
+    <!--Import JS Libraries-->
+
+</head>
+
+<body>
+    <div id="info">
+        <p>Dragon's Greed is a fantasy dice game between one or more players and a dealer, where each player in turn competes against the dealer.</p>
+    </div>
+    <div id="rules">
+        <p>There are two ways to play Dragon's Greed.</p>
+        <p>The first is the most commonly played, usually played in taverns or unorganised groups.</p>
+        <p>The aim of this game is to be the first to reach a decided number of points first, or have the highest out of a number of rounds. Each round, players must try to get as close to, but never exceeding a value of 18 for their hand. Certain conditions can change the outcome of the full game.</p>
+        <p>Below describes a turn by turn round of a game.</p>
+        <p>All players roll three D6, and the value of the hand is the sum of all three numbers. This is the first phase of a round.</p>
+        <p>Players can choose to roll two or more D6 in an attempt to get a higher valued hand. Players can also choose to be satisfied with their first hand, and not roll additional dice. This is the second phase of a round.</p>
+        <p>A players hand must not exceed 18, or else that player busts and is except from that round.</p>
+        <p>After all incidents have resolved, each players hands value is added onto their final tally.</p>
+        <br>
+        <p>This repeats until the decided number of turns have been met, or points have been achieved.</p>
+    </div>
+    <div id="rolls">
+    
+    </div>
+
+    <script>
+        var d6 = [1, 2, 3, 4, 5, 6];
+        var hand;
+        var player1Hand;
+
+        function rollDice(d6) {
+            var randomNumber = Math.floor(d6.length * Math.random());
+            return d6[randomNumber];
+        }
+
+        function startGame() {
+            player1Hand = [rollDice(d6), rollDice(d6), rollDice(d6)]
+        }
+
+        function getHandValue(hand) {
+            var sum = 0;
+            for (var i = 0; i < hand.length; i++) {
+                sum += hand[i];
+            }
+            return sum;
+        }
+
+        function hit() {
+            console.log('Player reaches for more gold.');
+            player1Hand.push(rollDice(d6), rollDice(d6));
+            console.log('Total Rolls: ' + player1Hand)
+            console.log('Total Value: ' + getHandValue(player1Hand))
+            if (getHandValue(player1Hand) > 18) {
+                console.log('Player Bust');
+            }
+        }
+        function keep() {
+            console.log('Player is satisfied');
+            console.log('Total Value: ' + getHandValue(player1Hand))
+        }
+
+        startGame();
+        console.log('Player Rolls: ' + player1Hand);
+        console.log('Player Value: ' + getHandValue(player1Hand));
+        
+        document.getElementById("rolls").innerHTML = player1Hand;
+
+    </script>
+    <button onClick="hit()">Hit!</button>
+    <button onClick="keep()">Keep it!</button>
+</body>
+
+</html>
