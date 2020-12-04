@@ -25,7 +25,16 @@
         <br>
         <p>This repeats until the decided number of turns have been met, or points have been achieved.</p>
     </div>
+    
     <div id="rolls">
+    
+    </div>
+
+    <div id="value">
+    
+    </div>
+    
+    <div id="result">
     
     </div>
 
@@ -56,20 +65,27 @@
             player1Hand.push(rollDice(d6), rollDice(d6));
             console.log('Total Rolls: ' + player1Hand)
             console.log('Total Value: ' + getHandValue(player1Hand))
+            //refresh number
+            document.getElementById("rolls").innerHTML = 'Total Rolls: ' + player1Hand;
+            document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
             if (getHandValue(player1Hand) > 18) {
                 console.log('Player Bust');
+                document.getElementById("result").innerHTML = 'Player Bust';
             }
         }
+        
         function keep() {
             console.log('Player is satisfied');
             console.log('Total Value: ' + getHandValue(player1Hand))
+            document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
         }
 
         startGame();
         console.log('Player Rolls: ' + player1Hand);
         console.log('Player Value: ' + getHandValue(player1Hand));
         
-        document.getElementById("rolls").innerHTML = player1Hand;
+        document.getElementById("rolls").innerHTML = 'Player Rolls: ' + player1Hand;
+        
 
     </script>
     <button onClick="hit()">Hit!</button>
