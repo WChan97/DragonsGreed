@@ -1,2 +1,3 @@
 # DragonsGreed
- Fantasy Dicegame similar to Blackjack
+ Fantasy Dice game
+ https://wchan97.github.io/DragonsGreed/
