@@ -4,92 +4,51 @@
 <head>
     <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
     <meta content="utf-8" http-equiv="encoding">
+    <!--Refernce css-->
     <title>Dragon's Greed - A Fantasy dice game.</title>
     <!--Import JS Libraries-->
-
+    <script src="./scripts/DragonsGreed.js"></script>
 </head>
 
 <body>
+    <h1>Dragon's Greed</h1>
+    <h4>by Walter Chan</h4>
     <div id="info">
-        <p>Dragon's Greed is a fantasy dice game between one or more players and a dealer, where each player in turn competes against the dealer.</p>
+        <p>Dragon's Greed is a fantasy dice game between several players, where each player competes for the highest number of points.</p>
     </div>
+
+    <div id="gamespace">
+
+        <div id="rolls">
+
+        </div>
+
+        <div id="value">
+
+        </div>
+
+        <div id="result">
+
+        </div>
+
+        <button id="play-game-button" onClick="playGame()">Play Game!</button>
+        <button id="take-button" onClick="take()">Take some More!</button>
+        <button id="keep-button" onClick="keep()">Keep It!</button>
+
+    </div>
+
     <div id="rules">
-        <p>There are two ways to play Dragon's Greed.</p>
-        <p>The first is the most commonly played, usually played in taverns or unorganised groups.</p>
+        <h4>Rules</h4>
         <p>The aim of this game is to be the first to reach a decided number of points first, or have the highest out of a number of rounds. Each round, players must try to get as close to, but never exceeding a value of 18 for their hand. Certain conditions can change the outcome of the full game.</p>
         <p>Below describes a turn by turn round of a game.</p>
         <p>All players roll three D6, and the value of the hand is the sum of all three numbers. This is the first phase of a round.</p>
         <p>Players can choose to roll two or more D6 in an attempt to get a higher valued hand. Players can also choose to be satisfied with their first hand, and not roll additional dice. This is the second phase of a round.</p>
         <p>A players hand must not exceed 18, or else that player busts and is except from that round.</p>
         <p>After all incidents have resolved, each players hands value is added onto their final tally.</p>
-        <br>
         <p>This repeats until the decided number of turns have been met, or points have been achieved.</p>
-    </div>
-    
-    <div id="rolls">
-    
+        <br>
     </div>
 
-    <div id="value">
-    
-    </div>
-    
-    <div id="result">
-    
-    </div>
-
-    <script>
-        var d6 = [1, 2, 3, 4, 5, 6];
-        var hand;
-        var player1Hand;
-
-        function rollDice(d6) {
-            var randomNumber = Math.floor(d6.length * Math.random());
-            return d6[randomNumber];
-        }
-
-        function startGame() {
-            player1Hand = [rollDice(d6), rollDice(d6), rollDice(d6)]
-        }
-
-        function getHandValue(hand) {
-            var sum = 0;
-            for (var i = 0; i < hand.length; i++) {
-                sum += hand[i];
-            }
-            return sum;
-        }
-
-        function hit() {
-            console.log('Player reaches for more gold.');
-            player1Hand.push(rollDice(d6), rollDice(d6));
-            console.log('Total Rolls: ' + player1Hand)
-            console.log('Total Value: ' + getHandValue(player1Hand))
-            //refresh number
-            document.getElementById("rolls").innerHTML = 'Total Rolls: ' + player1Hand;
-            document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
-            if (getHandValue(player1Hand) > 18) {
-                console.log('Player Bust');
-                document.getElementById("result").innerHTML = 'Player Bust';
-            }
-        }
-        
-        function keep() {
-            console.log('Player is satisfied');
-            console.log('Total Value: ' + getHandValue(player1Hand))
-            document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
-        }
-
-        startGame();
-        console.log('Player Rolls: ' + player1Hand);
-        console.log('Player Value: ' + getHandValue(player1Hand));
-        
-        document.getElementById("rolls").innerHTML = 'Player Rolls: ' + player1Hand;
-        
-
-    </script>
-    <button onClick="hit()">Hit!</button>
-    <button onClick="keep()">Keep it!</button>
 </body>
 
 </html>
