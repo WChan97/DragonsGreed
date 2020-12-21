@@ -3,8 +3,27 @@
 
 // Pre-Game
 // Define the number of players, and how many should be handled by the computer
-var players = [];
-//boolean isComp = true;
+
+//var numPlayers = 2;
+var playerName = "Gold Dragon";
+//var isComputer = true;
+//var playerHand;
+//var playerValue;
+//var playerPoints;
+//var players = [numPlayers];
+
+function demo() {
+    var newName;
+    var oldName;
+    var txt;
+    var player = prompt("Please enter your name:", playerName);
+    if (player == null || player == "") {
+        txt = "User cancelled the prompt.";
+    } else {
+        txt = "Hello " + player + "! How are you today?";
+    }
+    document.getElementById("demo").innerHTML = txt;
+}
 
 // Start Game
 //
@@ -26,13 +45,14 @@ function playGame() {
     document.getElementById("rolls").innerHTML = '';
     document.getElementById("value").innerHTML = '';
     document.getElementById("result").innerHTML = '';
-    
+
     player1Hand = [rollDice(d6), rollDice(d6), rollDice(d6)];
     console.log('Player Rolls: ' + player1Hand);
     console.log('Player Value: ' + getHandValue(player1Hand));
 
     document.getElementById("rolls").innerHTML = 'Player Rolls: ' + player1Hand;
     document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
+    specialEvents(player1Hand);
 }
 
 function getHandValue(hand) {
@@ -55,7 +75,7 @@ function take() {
     if (getHandValue(player1Hand) > 18) {
         console.log('Player Bust');
         document.getElementById("result").innerHTML = 'Player Bust';
-        
+
         document.getElementById("keep-button").disabled = true;
     }
 }
@@ -67,4 +87,8 @@ function keep() {
     document.getElementById("result").innerHTML = 'Points kept: ' + getHandValue(player1Hand);
     document.getElementById("take-button").disabled = true;
     document.getElementById("keep-button").disabled = true;
+}
+
+function specialEvents(hand) {
+    
 }
