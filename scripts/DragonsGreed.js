@@ -2,9 +2,78 @@
 //This file handles all calculations and events.
 
 // Pre-Game
-// Define the number of players, and how many should be handled by the computer
+// Define the number of players, and how many rounds.
+var numPlayers = 3;
+var numRounds = 10;
+//Players are [isActive, isNPC, playerName, playerPoints, playerValue]
+var player1 = [false, false, "Player 1", 0, 0];
+var player2 = [false, true, "Player 2", 0, 0];
+var player3 = [false, true, "Player 3", 0, 0];
+var player4 = [false, true, "Player 4", 0, 0];
+var player5 = [false, true, "Player 5", 0, 0];
+var player6 = [false, true, "Player 6", 0, 0];
+var player7 = [false, true, "Player 7", 0, 0];
+var player8 = [false, true, "Player 8", 0, 0];
+var playerList = [player1, player2, player3, player4, player5, player6, player7, player8];
 
-//var numPlayers = 2;
+function setup() {
+    var playerLoop;
+    //Ask how many players
+    numPlayers = prompt("How many Players for this game?", numPlayers);
+    //Ask how many rounds
+    numRounds = prompt("How many Rounds for this game?", numRounds);
+
+    //Toggle Active Players
+    playerLoop = numPlayers;
+    while (playerLoop >= 1) {
+        //Toggle isActive. I'll be honest, I have no idea how this is possible.
+        (playerList[playerLoop - 1])[0] = true;
+        //console.log(playerList[playerLoop - 1]);
+        playerLoop--;
+    }
+    //Create Table with active players & rounds
+    createTable(numPlayers, numRounds);
+
+    //Start Game
+    //startGame(numPlayers,numRounds);  
+}
+
+function createTable(numPlayers, numRounds) {
+    //Create table based on Number of Players and Rounds.
+    var columns = numPlayers + 1;
+    var rows = numRounds + 3;
+    
+    var tableDiv = document.getElementById("dynamicPlayerTable");
+
+    var table = document.createElement('TABLE');
+    table.border = '1';
+
+    var tableBody = document.createElement('TBODY');
+    table.appendChild(tableBody);
+    for (var i = 0; i < rows; i++) {
+        var tr = document.createElement('TR');
+        tableBody.appendChild(tr);
+
+        for (var j = 0; j < columns; j++) {
+            var td = document.createElement('TD');
+            td.width = '75';
+            td.appendChild(document.createTextNode("R,P " + i + "," + j));
+            tr.appendChild(td);
+        }
+    }
+    
+    tableDiv.appendChild(table);
+}
+
+//Demo test functions
+function demo() {
+    var txt;
+    createTable(3,10);
+    document.getElementById("demo").innerHTML = txt;
+}
+
+
+
 var playerName = "Gold Dragon";
 //var isComputer = true;
 //var playerHand;
@@ -12,18 +81,6 @@ var playerName = "Gold Dragon";
 //var playerPoints;
 //var players = [numPlayers];
 
-function demo() {
-    var newName;
-    var oldName;
-    var txt;
-    var player = prompt("Please enter your name:", playerName);
-    if (player == null || player == "") {
-        txt = "User cancelled the prompt.";
-    } else {
-        txt = "Hello " + player + "! How are you today?";
-    }
-    document.getElementById("demo").innerHTML = txt;
-}
 
 // Start Game
 //
@@ -32,6 +89,12 @@ function demo() {
 var d6 = [1, 2, 3, 4, 5, 6];
 var hand;
 var player1Hand;
+var tripleOne = [1, 1, 1];
+var tripleTwo = [2, 2, 2];
+var tripleThree = [3, 3, 3];
+var tripleFour = [4, 4, 4];
+var tripleFive = [5, 5, 5];
+var tripleSix = [6, 6, 6];
 
 function rollDice(d6) {
     var randomNumber = Math.floor(d6.length * Math.random());
@@ -90,5 +153,9 @@ function keep() {
 }
 
 function specialEvents(hand) {
-    
+    console.log(hand);
+    if (hand == tripleOne || hand == tripleTwo || hand == tripleThree || hand == tripleFour || hand == tripleFive || hand == tripleSix) {
+        console.log('Win Condition');
+        document.getElementById("demo").innerHTML = 'Win condition';
+    }
 }
