@@ -40,9 +40,17 @@ function setup() {
 
 function createTable(numPlayers, numRounds) {
     //Create table based on Number of Players and Rounds.
-    var columns = numPlayers + 1;
-    var rows = numRounds + 3;
-    
+    var columns = numPlayers;
+    columns++;
+    var rows = numRounds;
+    rows++;
+    rows++;
+    rows++;
+    var totalPointRow = numRounds;
+    totalPointRow++;
+    var buttonRow = totalPointRow;
+    buttonRow++;
+
     var tableDiv = document.getElementById("dynamicPlayerTable");
 
     var table = document.createElement('TABLE');
@@ -56,19 +64,35 @@ function createTable(numPlayers, numRounds) {
 
         for (var j = 0; j < columns; j++) {
             var td = document.createElement('TD');
-            td.width = '75';
-            td.appendChild(document.createTextNode("R,P " + i + "," + j));
+            td.width = '100';
+            if (i == 0 && j == 0) {
+                td.appendChild(document.createTextNode(""));
+            } else if (i == 0 && j != 0) {
+                td.appendChild(document.createTextNode((playerList[j - 1])[2]));
+            } else if (i != 0 && i <= numRounds && j == 0) {
+                td.appendChild(document.createTextNode("Round: " + i));
+            } else if (i != 0 && i == totalPointRow && j == 0) {
+                td.appendChild(document.createTextNode("Total Points:"));
+            } else if (i == totalPointRow && j != 0) {
+                td.appendChild(document.createTextNode("sum"));
+            } else if (i != 0 && i == buttonRow && j == 0) {
+                td.appendChild(document.createTextNode("Buttons:"));
+            } else if (i == buttonRow && j != 0) {
+                td.appendChild(document.createTextNode("button"));
+            } else {
+                td.appendChild(document.createTextNode([rollDice(d6), rollDice(d6), rollDice(d6)]));
+            }
             tr.appendChild(td);
         }
     }
-    
+
     tableDiv.appendChild(table);
 }
 
 //Demo test functions
 function demo() {
-    var txt;
-    createTable(3,10);
+    var txt = 'demo in progress';
+    setup();
     document.getElementById("demo").innerHTML = txt;
 }
 
