@@ -1,185 +1,225 @@
-//DragonsGreed.js
-//This file handles all calculations and events.
-
-// Pre-Game
-// Define the number of players, and how many rounds.
-var numPlayers = 3;
-var numRounds = 10;
-//Players are [isActive, isNPC, playerName, playerPoints, playerValue]
-var player1 = [false, false, "Player 1", 0, 0];
-var player2 = [false, true, "Player 2", 0, 0];
-var player3 = [false, true, "Player 3", 0, 0];
-var player4 = [false, true, "Player 4", 0, 0];
-var player5 = [false, true, "Player 5", 0, 0];
-var player6 = [false, true, "Player 6", 0, 0];
-var player7 = [false, true, "Player 7", 0, 0];
-var player8 = [false, true, "Player 8", 0, 0];
-var playerList = [player1, player2, player3, player4, player5, player6, player7, player8];
-
-function setup() {
-    var playerLoop;
-    //Ask how many players
-    numPlayers = prompt("How many Players for this game?", numPlayers);
-    //Ask how many rounds
-    numRounds = prompt("How many Rounds for this game?", numRounds);
-
-    //Toggle Active Players
-    playerLoop = numPlayers;
-    while (playerLoop >= 1) {
-        //Toggle isActive. I'll be honest, I have no idea how this is possible.
-        (playerList[playerLoop - 1])[0] = true;
-        //console.log(playerList[playerLoop - 1]);
-        playerLoop--;
-    }
-    //Create Table with active players & rounds
-    createTable(numPlayers, numRounds);
-
-    //Start Game
-    //startGame(numPlayers,numRounds);  
+function rollDice() {
+	return Math.floor(Math.random() * 6) + 1;
 }
 
-function createTable(numPlayers, numRounds) {
-    //Create table based on Number of Players and Rounds.
-    var columns = numPlayers;
-    columns++;
-    var rows = numRounds;
-    rows++;
-    rows++;
-    rows++;
-    var totalPointRow = numRounds;
-    totalPointRow++;
-    var buttonRow = totalPointRow;
-    buttonRow++;
+function startGame() {
+	var playerCount = parseInt(document.getElementById("playerCount").value);
+	var roundCount = parseInt(document.getElementById("roundCount").value);
+	var gameStatus = document.getElementById("gameStatus");
+	var gameContainer = document.getElementById("gameContainer");
+	gameContainer.innerHTML = "";
 
-    var tableDiv = document.getElementById("dynamicPlayerTable");
+	var table = document.createElement("table");
+	table.id = "gameTable";
 
-    var table = document.createElement('TABLE');
-    table.border = '1';
+	var headerRow = table.insertRow();
+	headerRow.innerHTML =
+		"<th>Player</th><th>Hand</th><th>Total</th><th>Score</th><th>Action</th>";
 
-    var tableBody = document.createElement('TBODY');
-    table.appendChild(tableBody);
-    for (var i = 0; i < rows; i++) {
-        var tr = document.createElement('TR');
-        tableBody.appendChild(tr);
+	for (var i = 1; i <= playerCount; i++) {
+		var row = table.insertRow();
+		row.innerHTML =
+			"<td>Player " +
+			i +
+			"</td><td>---</td><td>---</td><td>0</td><td><button onclick='rollAdditionalHand(" +
+			(i - 1) +
+			")' disabled>Greed More</button>   <button onclick='holdHand(" +
+			(i - 1) +
+			")' disabled>I'm Satisfied</button></td>";
+	}
 
-        for (var j = 0; j < columns; j++) {
-            var td = document.createElement('TD');
-            td.width = '100';
-            if (i == 0 && j == 0) {
-                td.appendChild(document.createTextNode(""));
-            } else if (i == 0 && j != 0) {
-                td.appendChild(document.createTextNode((playerList[j - 1])[2]));
-            } else if (i != 0 && i <= numRounds && j == 0) {
-                td.appendChild(document.createTextNode("Round: " + i));
-            } else if (i != 0 && i == totalPointRow && j == 0) {
-                td.appendChild(document.createTextNode("Total Points:"));
-            } else if (i == totalPointRow && j != 0) {
-                td.appendChild(document.createTextNode("sum"));
-            } else if (i != 0 && i == buttonRow && j == 0) {
-                td.appendChild(document.createTextNode("Buttons:"));
-            } else if (i == buttonRow && j != 0) {
-                td.appendChild(document.createTextNode("button"));
-            } else {
-                td.appendChild(document.createTextNode([rollDice(d6), rollDice(d6), rollDice(d6)]));
-            }
-            tr.appendChild(td);
-        }
-    }
+	gameContainer.appendChild(table);
 
-    tableDiv.appendChild(table);
+	var nextRoundButton = document.createElement("button");
+	nextRoundButton.textContent = "Next Round";
+	nextRoundButton.id = "nextRoundButton";
+	nextRoundButton.style.display = "block";
+	nextRoundButton.onclick = startNextRound;
+
+	gameContainer.appendChild(nextRoundButton);
+	gameContainer.style.display = "block";
+
+	// Call rollNewHand for all players
+	for (var i = 0; i < playerCount; i++) {
+		rollNewHand(i);
+	}
+
+	// Display current round and remaining rounds in gameStatus
+	gameStatus.textContent = "Round " + 1 + " out of " + roundCount;
+	gameStatus.style.display = "block";
+
+	// Enable Roll Dice and Hold Hand buttons after a delay
+	setTimeout(function () {
+		var buttons = document.getElementsByTagName("button");
+		for (var i = 0; i < buttons.length; i++) {
+			buttons[i].disabled = false;
+		}
+	}, 1000);
 }
 
-//Demo test functions
-function demo() {
-    var txt = 'demo in progress';
-    setup();
-    document.getElementById("demo").innerHTML = txt;
+function startNextRound() {
+	var table = document.getElementById("gameTable");
+	var rows = table.getElementsByTagName("tr");
+	var playerCount = rows.length - 1; // Subtract 1 for header row
+
+	for (var i = 1; i <= playerCount; i++) {
+		var row = rows[i];
+		var handCell = row.cells[1];
+		var totalCell = row.cells[2];
+		var scoreCell = row.cells[3];
+
+		var hand = handCell.textContent;
+		var total = totalCell.textContent;
+		var score = scoreCell.textContent;
+
+		if (hand !== "---") {
+			scoreCell.textContent = parseInt(score) + (isNaN(parseInt(total)) ? 0 : parseInt(total));
+		} else {
+			scoreCell.textContent = parseInt(score) + 0; // Set score to 0 for players who bust
+		}
+		rollNewHand(i - 1);
+	}
+
+	var gameStatus = document.getElementById("gameStatus");
+	var currentRound = parseInt(gameStatus.textContent.split(" ")[1]);
+	var roundCount = parseInt(document.getElementById("roundCount").value);
+
+
+	// Enable Roll Dice and Hold Hand buttons for next round
+	var buttons = document.getElementsByTagName("button");
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].disabled = false;
+	}
+
+	if (currentRound === roundCount) {
+		determineWinner();
+	} else {
+		gameStatus.textContent = "Round " + (currentRound + 1) + " out of " + roundCount;
+	}
+
 }
 
 
 
-var playerName = "Gold Dragon";
-//var isComputer = true;
-//var playerHand;
-//var playerValue;
-//var playerPoints;
-//var players = [numPlayers];
+function rollNewHand(playerIndex) {
+	var table = document.getElementById("gameTable");
+	var rows = table.getElementsByTagName("tr");
+	var row = rows[playerIndex + 1];
+	var handCell = row.cells[1];
 
+	var diceRoll1 = rollDice();
+	var diceRoll2 = rollDice();
+	var diceRoll3 = rollDice();
 
-// Start Game
-//
+	var newHand = "(" + diceRoll1 + " + " + diceRoll2 + " + " + diceRoll3 + ")";
+	var total = diceRoll1 + diceRoll2 + diceRoll3;
 
-//Old Javascript Prototype
-var d6 = [1, 2, 3, 4, 5, 6];
-var hand;
-var player1Hand;
-var tripleOne = [1, 1, 1];
-var tripleTwo = [2, 2, 2];
-var tripleThree = [3, 3, 3];
-var tripleFour = [4, 4, 4];
-var tripleFive = [5, 5, 5];
-var tripleSix = [6, 6, 6];
-
-function rollDice(d6) {
-    var randomNumber = Math.floor(d6.length * Math.random());
-    return d6[randomNumber];
+	handCell.textContent = newHand;
+	row.cells[2].textContent = total;
 }
 
-function playGame() {
-    //Enable Buttons, and clear divs
-    document.getElementById("take-button").disabled = false;
-    document.getElementById("keep-button").disabled = false;
-    document.getElementById("rolls").innerHTML = '';
-    document.getElementById("value").innerHTML = '';
-    document.getElementById("result").innerHTML = '';
+function rollAdditionalHand(playerIndex) {
+	var table = document.getElementById("gameTable");
+	var rows = table.getElementsByTagName("tr");
+	var row = rows[playerIndex + 1];
+	var handCell = row.cells[1];
+	var hand = handCell.textContent.trim(); // Current hand value
 
-    player1Hand = [rollDice(d6), rollDice(d6), rollDice(d6)];
-    console.log('Player Rolls: ' + player1Hand);
-    console.log('Player Value: ' + getHandValue(player1Hand));
+	var total = eval(hand.replace(/[^0-9+*/.-]/g, ''));
 
-    document.getElementById("rolls").innerHTML = 'Player Rolls: ' + player1Hand;
-    document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
-    specialEvents(player1Hand);
+	var diceCount = parseInt(prompt("How many dice do you want to roll? Minimum of 2.", 2));
+
+	if (isNaN(diceCount) || diceCount < 2) {
+		diceCount = 2;
+	}
+
+	var diceRolls = [];
+	for (var i = 0; i < diceCount; i++) {
+		var diceRoll = rollDice();
+		diceRolls.push(diceRoll);
+		total += diceRoll;
+	}
+
+	var newHand = hand !== '---' ? hand + " + " + diceRolls.join(" + ") : "(" + diceRolls.join(" + ") + ")";
+
+	handCell.textContent = newHand;
+
+	if (total > 18) {
+		row.cells[2].textContent = "BUST";
+	} else if (hand !== '---') {
+		row.cells[2].textContent = total;
+	}
+
+	// Disable Roll Dice and Hold Hand buttons
+	var rollDiceButton = row.cells[4].getElementsByTagName("button")[0];
+	var holdHandButton = row.cells[4].getElementsByTagName("button")[1];
 }
 
-function getHandValue(hand) {
-    var sum = 0;
-    for (var i = 0; i < hand.length; i++) {
-        sum += hand[i];
-    }
-    return sum;
+function holdHand(playerIndex) {
+	var table = document.getElementById("gameTable");
+	var rows = table.getElementsByTagName("tr");
+	var row = rows[playerIndex + 1];
+
+	// Disable Roll Dice and Hold Hand buttons
+	var rollDiceButton = row.cells[4].getElementsByTagName("button")[0];
+	var holdHandButton = row.cells[4].getElementsByTagName("button")[1];
+	rollDiceButton.disabled = true;
+	holdHandButton.disabled = true;
 }
 
-function take() {
-    console.log('Player reaches for more gold.');
-    player1Hand.push(rollDice(d6), rollDice(d6));
-    console.log('Total Rolls: ' + player1Hand)
-    console.log('Total Value: ' + getHandValue(player1Hand))
-    //refresh number
-    document.getElementById("rolls").innerHTML = 'Total Rolls: ' + player1Hand;
-    document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
-    document.getElementById("take-button").disabled = true;
-    if (getHandValue(player1Hand) > 18) {
-        console.log('Player Bust');
-        document.getElementById("result").innerHTML = 'Player Bust';
+function determineWinner() {
+	var table = document.getElementById("gameTable");
+	var rows = table.getElementsByTagName("tr");
+	var playerCount = rows.length - 1; // Subtract 1 for header row
+	var maxScore = 0;
+	var winners = [];
 
-        document.getElementById("keep-button").disabled = true;
-    }
-}
+	for (var i = 1; i <= playerCount; i++) {
+		var row = rows[i];
+		var score = parseInt(row.cells[3].textContent);
 
-function keep() {
-    console.log('Player is satisfied');
-    console.log('Total Value: ' + getHandValue(player1Hand))
-    document.getElementById("value").innerHTML = 'Total Value: ' + getHandValue(player1Hand);
-    document.getElementById("result").innerHTML = 'Points kept: ' + getHandValue(player1Hand);
-    document.getElementById("take-button").disabled = true;
-    document.getElementById("keep-button").disabled = true;
-}
+		if (score > maxScore) {
+			maxScore = score;
+			winners = [i];
+		} else if (score === maxScore) {
+			winners.push(i);
+		}
+	}
 
-function specialEvents(hand) {
-    console.log(hand);
-    if (hand == tripleOne || hand == tripleTwo || hand == tripleThree || hand == tripleFour || hand == tripleFive || hand == tripleSix) {
-        console.log('Win Condition');
-        document.getElementById("demo").innerHTML = 'Win condition';
-    }
+	var gameStatus = document.getElementById("gameStatus");
+	gameStatus.textContent = "Game Over! Winners: " + winners.map(winner => "Player " + winner).join(", ");
+
+	// Disable all buttons except the "Start Game" button
+	var buttons = document.getElementsByTagName("button");
+	for (var i = 0; i < buttons.length; i++) {
+		var button = buttons[i];
+		if (button.id !== "startGameButton") {
+			button.disabled = true;
+		}
+	}
+
+	// Hide the "Next Round" button
+	var nextRoundButton = document.getElementById("nextRoundButton");
+	nextRoundButton.style.display = "none";
+
+	// Create a new table with all players' scores
+	var scoreTable = document.createElement("table");
+	var headerRow = scoreTable.insertRow();
+	headerRow.innerHTML = "<th>Player</th><th>Score</th>";
+
+	for (var i = 1; i <= playerCount; i++) {
+		var row = rows[i];
+		var score = parseInt(row.cells[3].textContent);
+		var playerName = "Player " + i;
+
+		var scoreRow = scoreTable.insertRow();
+		scoreRow.innerHTML = "<td>" + playerName + "</td><td>" + score + "</td>";
+	}
+
+	// Clear the game table
+	table.innerHTML = "";
+
+	// Display the new score table
+	var gameContainer = document.getElementById("gameContainer");
+	gameContainer.appendChild(scoreTable);
 }

@@ -2,60 +2,82 @@
 <html lang="en">
 
 <head>
-    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
-    <meta content="utf-8" http-equiv="encoding">
-    <!--Reference css-->
-    <title>Dragon's Greed - A Fantasy dice game.</title>
-    <!--Import JS Libraries-->
-    <script src="./scripts/DragonsGreed.js"></script>
+	<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+	<meta content="utf-8" http-equiv="encoding">
+	<!--Reference css-->
+	<link rel="stylesheet" href="style.css">
+	<title>Dragon's Greed - A Fantasy dice game.</title>
+	<!--Import JS Libraries-->
+	<script src="./scripts/DragonsGreed.js"></script>
 </head>
 
 <body>
-    <h1>Dragon's Greed</h1>
-    <h4>by Walter Chan</h4>
-    <div id="info">
-        <p>Dragon's Greed is a fantasy dice game between several players, where each player competes for the highest number of points.</p>
-    </div>
-    <br>
-    <div id="gamespace">
-        <button id="demo-button" onClick="demo()">Demo!</button>
-        <div id="demo">
-            this is demo
-        </div>
+	<h1>Dragon's Greed</h1>
+	<h4>by Walter Chan</h4>
+	<div id="info">
+		<p>Dragon's Greed is an exhilarating game of cunning and strategy, designed to be played within the immersive world of Dungeons & Dragons. Founded by a wise dragon to impart the value of greed tempered with caution, the game challenges players to accumulate wealth and power without overextending themselves. Whether played among the adventurers or as a captivating rivalry between the players and the Dungeon Master, Dragon's Greed offers the cheeky experience where calculated risks and shrewd decision-making lead to victory.</p>
+	</div>
+	<br>
+	<hr class="rounded">
+	<div>
+		<label for="playerCount">Number of Players: </label>
+		<input type="number" id="playerCount" min="2" value="2">
+	</div>
 
-        <button id="play-game-button" onClick="playGame()">Play Game!</button>
+	<div>
+		<label for="roundCount">Number of Rounds: </label>
+		<input type="number" id="roundCount" min="1" value="1">
+	</div>
 
-        <div id="rolls">
-        </div>
-        <div id="value">
-        </div>
-        <div id="result">
-        </div>
+	<button id=startGameButton onclick="startGame()">Start Game</button>
+	<hr class="rounded">
+	<div id="gameStatus"></div>
+	<hr class="rounded">
+	<div id="gameContainer"></div>
+	<hr class="rounded">
+	<br>
+	<div id="summary">
+		<h4>Summary:</h4>
+		<p>Dragon's Greed is a fantasy dice game played by several players. The objective of the game is to either accumulate the highest number of points by the end of a predetermined number of rounds or be the first player to reach a specific target number of points.
+		</p>
+	</div>
+	<br>
+	<div id="gameplay">
+		<h4>Gameplay:</h4>
+		<p>1. At the start of each round, all players roll three six-sided dice (D6).
+		</p>
+		<p>2. The sum of the numbers rolled on the three dice determines the initial value of a player's hand.
+		</p>
+		<p>3. Players can choose to be satisfied with their initial hand and not roll any additional dice, or they can opt to roll two or more dice in an attempt to improve their hand.
+		</p>
+		<p>4. The goal is to get as close as possible to a value of 18 without exceeding it. If a player's hand exceeds 18, they bust and are eliminated from the round.
+		</p>
+		<p>5. After all players have decided whether to roll additional dice or remain with their initial hand, the round progresses to the next phase.
+		</p>
+		<p>6. The value of each player's hand that did not bust is added to their final tally for the game.
+		</p>
+		<p>7. The game continues for the agreed-upon number of rounds or until a player reaches the predetermined target number of points.
+		</p>
+	</div>
+	<br>
+	<div id="pointscoring">
+		<h4>Points and Scoring:</h4>
+		<p>1. Points are awarded only to the players who did not bust during a round.
+		</p>
+		<p>2. The value of the surviving hand determines the points earned by each player.
+		</p>
+		<p>3. The player's final tally is updated after each round by adding the value of their surviving hand to their score.
+		</p>
+	</div>
+	<br>
+	<div id="wincondition">
+		<h4>Determining the Winner:</h4>
+		<p>1. There are two ways to determine the winner, depending on mutual agreement among the players:
+		</p>
+		<p> a) Highest Total Points: The game is played for a set number of rounds, and the player with the highest total points at the end of the rounds is declared the winner. (The game sample uses this condition.)</p>
+		<p> b) Target Points: The game continues until one player reaches the agreed-upon target number of points first. That player is then declared the winner.</p>
 
-        <div id="dynamicPlayerTable"></div>
-
-        <button id="take-button" onClick="take()">Take some More!</button>
-        <button id="keep-button" onClick="keep()">Keep It!</button>
-
-        <!--Disable The buttons initially-->
-        <script>
-            document.getElementById("take-button").disabled = true;
-            document.getElementById("keep-button").disabled = true;
-
-        </script>
-    </div>
-    <br>
-    <div id="rules">
-        <h4>Rules</h4>
-        <p>The aim of this game is to be the first to reach a decided number of points first, or have the highest out of a number of rounds. Each round, players must try to get as close to, but never exceeding a value of 18 for their hand. Certain conditions can change the outcome of the full game.</p>
-        <p>Below describes a turn by turn round of a game.</p>
-        <p>All players roll three D6, and the value of the hand is the sum of all three numbers. This is the first phase of a round.</p>
-        <p>Players can choose to roll two or more D6 in an attempt to get a higher valued hand. Players can also choose to be satisfied with their first hand, and not roll additional dice. This is the second phase of a round.</p>
-        <p>A players hand must not exceed 18, or else that player busts and is except from that round.</p>
-        <p>After all incidents have resolved, each players hands value is added onto their final tally.</p>
-        <p>This repeats until the decided number of turns have been met, or points have been achieved.</p>
-    </div>
-
+	</div>
 </body>
 
 </html>

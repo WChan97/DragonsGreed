@@ -1,1 +1,48 @@
-/* Styles go here*/
+body {
+  background-color: #40826D;
+  color: white;
+  font-size: 24px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  background-color: #40826D; /* Set the background color to match the text color */
+}
+
+th,
+td {
+  border: 1px solid black;
+  padding: 8px;
+  text-align: center;
+  color: white; /* Set the text color to white */
+}
+
+input[type="number"] {
+  font-size: 24px;
+  padding: 0.5em;
+}
+
+button {
+  font-size: 24px;
+  padding: 0.5em 1em;
+  background-color: #2B6E4F;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #1E5039;
+}
+
+button:disabled {
+  background-color: #A4C7B7;
+  color: gray;
+  cursor: not-allowed;
+}
+
+hr.rounded {
+  border-top: 8px solid #bbb;
+  border-radius: 5px;
+}
